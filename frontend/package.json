@@ -1,0 +1,55 @@
+{
+  "name": "project-template-frontend",
+  "version": "0.1.0",
+  "description": "Project Template - Frontend",
+  "productName": "Project Template - Frontend",
+  "author": "Bewave <dev@bewave.io>",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --ext .js,.ts,.vue ./",
+    "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
+    "test": "echo \"No test specified\" && exit 0",
+    "dev": "quasar dev",
+    "build": "quasar build",
+    "type-check": "vue-tsc --skipLibCheck --noEmit"
+  },
+  "dependencies": {
+    "@feathersjs/authentication-client": "^5.0.21",
+    "@feathersjs/feathers": "^5.0.21",
+    "@feathersjs/socketio-client": "^5.0.21",
+    "@quasar/extras": "^1.16.9",
+    "feathers-pinia": "4.1.1",
+    "pinia": "^2.1.7",
+    "project-template-backend": "file:../backend/public/project-template-backend-0.1.1.tgz",
+    "quasar": "^2.14.2",
+    "socket.io-client": "^4.7.4",
+    "vue": "^3.4.15"
+  },
+  "devDependencies": {
+    "@quasar/app-vite": "^1.7.3",
+    "@types/node": "20.14.9",
+    "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "@typescript-eslint/parser": "^7.14.1",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "@vue/eslint-config-typescript": "^13.0.0",
+    "@vue/typescript-plugin": "^3.0.0-alpha.2",
+    "autoprefixer": "^10.4.17",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-simple-import-sort": "^12.1.0",
+    "eslint-plugin-vue": "^9.21.1",
+    "postcss": "^8.4.33",
+    "prettier": "^3.3.2",
+    "typescript": "^5.3.3",
+    "vite": "^5.3.2",
+    "vite-svg-loader": "^5.1.0",
+    "vue-router": "^4.3.2",
+    "vue-tsc": "^2.0.22"
+  },
+  "engines": {
+    "node": ">= 18",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.22.2"
+  }
+}

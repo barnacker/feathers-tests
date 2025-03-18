@@ -1,0 +1,14 @@
+### Login
+
+POST http://localhost:3030/authentication
+Content-Type: application/json
+
+{
+  "strategy": "local",
+  "email": "iamjohn@whoru.com",
+  "password": "somepass"
+}
+
+> {%
+  client.global.set("auth_token", response.body.accessToken);
+%}

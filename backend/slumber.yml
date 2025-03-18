@@ -1,0 +1,50 @@
+# For basic usage info, see:
+# https://slumber.lucaspickering.me/book/getting_started.html
+# For all collection options, see:
+# https://slumber.lucaspickering.me/book/api/request_collection/index.html
+
+# Profiles are groups of data you can easily switch between. A common usage is
+# to define profiles for various environments of a REST service
+
+profiles:
+  local:
+    data:
+      host: http://localhost:3030
+      user_id: "{{chains.user_id}}"
+
+chains:
+  user_id:
+    source: !request
+      recipe: create_user
+    selector: $._id
+
+requests:
+  get_users: !request
+    method: GET
+    url: "{{host}}/users"
+
+  create_user: !request
+    method: POST
+    url: "{{host}}/users"
+    body: !json {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "iamjohn@whoru.com",
+      "password": "somepass"
+    }
+
+  get_user: !request
+    method: GET
+    url: "{{host}}/users/{{user_id}}"
+
+  update_user: !request
+    method: PATCH
+    url: "{{host}}/users/{{user_id}}"
+    body: !json {
+      "firstName": "Joe",
+      "email": "iamjoe@whoru.com",
+    }
+
+  remove_user: !request
+    method: DELETE
+    url: "{{host}}/users/{{user_id}}"
