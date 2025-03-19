@@ -19,5 +19,5 @@ Located in `./frontend`. View [`README.md`](./frontend/README.md) for more info.
 You can simply start a MongoDB instance using Docker by running:
 
 ```bash
-   docker run -p 27017:27017 --rm -d --name project-template-mongodb -v "$(git rev-parse --show-toplevel)/data:/data/db" mongo:latest
+   docker run -p 27017:27017 --rm --name project-template-mongodb -v "$(git rev-parse --show-toplevel)/data:/data/db" mongo:latest
 ```
