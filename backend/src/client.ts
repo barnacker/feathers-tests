@@ -4,6 +4,22 @@ import type { TransportConnection, Application } from '@feathersjs/feathers';
 import authenticationClient from '@feathersjs/authentication-client';
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client';
 
+import { channelsClient } from './services/channels/channels.shared';
+export type {
+  Channels,
+  ChannelsData,
+  ChannelsQuery,
+  ChannelsPatch,
+} from './services/channels/channels.shared';
+
+import { channelsClient } from './services/channels/channels.shared';
+export type {
+  Channels,
+  ChannelsData,
+  ChannelsQuery,
+  ChannelsPatch,
+} from './services/channels/channels.shared';
+
 import { userClient } from './services/users/users.shared';
 export type { User, UserData, UserQuery, UserPatch } from './services/users/users.shared';
 
@@ -23,7 +39,7 @@ export type ClientApplication = Application<ServiceTypes, Configuration>;
  * @see https://dove.feathersjs.com/api/client.html
  * @returns The Feathers client application
  */
-export const createClient = <Configuration = any>(
+export const createClient = <Configuration = any,>(
   connection: TransportConnection<ServiceTypes>,
   authenticationOptions: Partial<AuthenticationClientOptions> = {},
 ) => {
@@ -34,5 +50,7 @@ export const createClient = <Configuration = any>(
   client.set('connection', connection);
 
   client.configure(userClient);
+  client.configure(channelsClient);
+  client.configure(channelsClient);
   return client;
 };

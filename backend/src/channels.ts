@@ -11,6 +11,8 @@ export const channels = (app: Application) => {
   );
 
   app.on('connection', (connection: RealTimeConnection) => {
+    console.log('connection');
+    logger.warn('connection')
     // On a new real-time connection, add it to the anonymous channel
     app.channel('anonymous').join(connection);
   });

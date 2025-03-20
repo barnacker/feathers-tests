@@ -8,7 +8,7 @@ import type { User, UserData, UserPatch, UserQuery } from './users.schema';
 
 export type { User, UserData, UserPatch, UserQuery };
 
-export interface UserParams extends MongoDBAdapterParams<UserQuery> {}
+export interface UserParams extends MongoDBAdapterParams<UserQuery> { }
 
 // By default, calls the standard MongoDB adapter service methods but can be customized with your own functionality.
 export class UserService<ServiceParams extends Params = UserParams> extends MongoDBService<
@@ -16,7 +16,9 @@ export class UserService<ServiceParams extends Params = UserParams> extends Mong
   UserData,
   UserParams,
   UserPatch
-> {}
+> {
+
+}
 
 export const getOptions = (app: Application): MongoDBAdapterOptions => {
   return {
