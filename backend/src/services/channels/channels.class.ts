@@ -1,6 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
 import type { Id, NullableId, Params, ServiceInterface } from '@feathersjs/feathers';
-
+import {app} from "../../app"
 import type { Application } from '../../declarations';
 import type { Channels, ChannelsData, ChannelsPatch, ChannelsQuery } from './channels.schema';
 
@@ -12,6 +12,9 @@ export interface ChannelsServiceOptions {
 
 export interface ChannelsParams extends Params<ChannelsQuery> { }
 
+
+
+
 // This is a skeleton for a custom service class. Remove or add the methods you need here
 export class ChannelsService<ServiceParams extends ChannelsParams = ChannelsParams>
   implements ServiceInterface<Channels, ChannelsData, ServiceParams, ChannelsPatch>
@@ -19,50 +22,43 @@ export class ChannelsService<ServiceParams extends ChannelsParams = ChannelsPara
   constructor(public options: ChannelsServiceOptions) { }
 
   async find(_params?: ServiceParams): Promise<Channels[]> {
-    console.log(_params);
     return [];
   }
 
-  async get(id: Id, _params?: ServiceParams): Promise<Channels> {
+  async get(id: string, _params?: ServiceParams): Promise<Channels> {
     return {
-      id: 0,
-      text: `A new message with ID: ${id}!`,
+      id: id,
     };
   }
 
-  async create(data: ChannelsData, params?: ServiceParams): Promise<Channels>;
-  async create(data: ChannelsData[], params?: ServiceParams): Promise<Channels[]>;
-  async create(data: ChannelsData | ChannelsData[], params?: ServiceParams): Promise<Channels | Channels[]> {
-    if (Array.isArray(data)) {
-      return Promise.all(data.map((current) => this.create(current, params)));
+  async create(data: ChannelsData, params?: ServiceParams): Promise<Channels>{
+
+   if(params?.connection){
+params.connection.channels.push(data.id)
+    app.channel(`channels/${data.id}`).join(params.connection)
     }
-    console.log(params);
+
     return {
-      id: 0,
-      ...data,
+      id: data.id,
     };
   }
 
   // This method has to be added to the 'methods' option to make it available to clients
-  async update(id: NullableId, data: ChannelsData, _params?: ServiceParams): Promise<Channels> {
+  async update(id: string, data: ChannelsData, _params?: ServiceParams): Promise<Channels> {
     return {
-      id: 0,
-      ...data,
+      id: id,
     };
   }
 
-  async patch(id: NullableId, data: ChannelsPatch, _params?: ServiceParams): Promise<Channels> {
+  async patch(id: string, data: ChannelsPatch, _params?: ServiceParams): Promise<Channels> {
     return {
-      id: 0,
-      text: `Fallback for ${id}`,
-      ...data,
+      id: id,
     };
   }
 
-  async remove(id: NullableId, _params?: ServiceParams): Promise<Channels> {
+  async remove(id: string, _params?: ServiceParams): Promise<Channels> {
     return {
-      id: 0,
-      text: 'removed',
+      id: id,
     };
   }
 }

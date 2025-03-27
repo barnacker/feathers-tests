@@ -22,7 +22,7 @@ const handleSubmit = () => {
   if (!editUser.value._id || password.value) {
     editUser.value.password = password.value;
   }
-  emit("submit", editUser);
+  emit("submit", editUser.value);
 };
 </script>
 

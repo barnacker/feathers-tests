@@ -4,7 +4,7 @@ import type { AuthenticationResult } from '@feathersjs/authentication';
 import '@feathersjs/transport-commons';
 import type { Application, HookContext } from './declarations';
 import { logger } from './logger';
-
+import { ChannelsService } from './services/channels/channels.class'
 export const channels = (app: Application) => {
   logger.warn(
     'Publishing all events to all authenticated users. See `channels.ts` and https://dove.feathersjs.com/api/channels.html for more information.',
@@ -26,6 +26,8 @@ export const channels = (app: Application) => {
 
       // Add it to the authenticated user channel
       app.channel('authenticated').join(connection);
+      //Add user channels
+      app.channel(`users/${connection.user._id}`).join(connection)
     }
   });
 
@@ -33,8 +35,16 @@ export const channels = (app: Application) => {
   app.publish((data: any, context: HookContext) => {
     // Here you can add event publishers to channels set up in `channels.js`
     // To publish only for a specific event use `app.publish(eventname, () => {})`
-
     // e.g. to publish all service events to all authenticated users use
-    return app.channel('anonymous');
+    console.log( context.self instanceof ChannelsService)
+    if(context.arguments[2]?.connection?.user){
+
+
+    console.log(data._id)
+    return [
+        app.channel(`users/${context.arguments[2].connection.user._id}`),
+      //  app.channel(`channels/${context.arguments[2].connection.user._id}`),
+      ]
+    }
   });
 };

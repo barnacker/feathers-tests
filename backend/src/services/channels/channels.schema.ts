@@ -10,8 +10,7 @@ import type { ChannelsService } from './channels.class';
 // Main data model schema
 export const channelsSchema = Type.Object(
   {
-    id: Type.Number(),
-    text: Type.String(),
+    id: Type.String(),
   },
   { $id: 'Channels', additionalProperties: false },
 );
@@ -22,7 +21,7 @@ export const channelsResolver = resolve<Channels, HookContext<ChannelsService>>(
 export const channelsExternalResolver = resolve<Channels, HookContext<ChannelsService>>({});
 
 // Schema for creating new entries
-export const channelsDataSchema = Type.Pick(channelsSchema, ['text'], {
+export const channelsDataSchema = Type.Pick(channelsSchema, ['id'], {
   $id: 'ChannelsData',
 });
 export type ChannelsData = Static<typeof channelsDataSchema>;
@@ -38,7 +37,7 @@ export const channelsPatchValidator = getValidator(channelsPatchSchema, dataVali
 export const channelsPatchResolver = resolve<Channels, HookContext<ChannelsService>>({});
 
 // Schema for allowed query properties
-export const channelsQueryProperties = Type.Pick(channelsSchema, ['id', 'text']);
+export const channelsQueryProperties = Type.Pick(channelsSchema, ['id']);
 export const channelsQuerySchema = Type.Intersect(
   [
     querySyntax(channelsQueryProperties),

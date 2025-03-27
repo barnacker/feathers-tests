@@ -12,14 +12,6 @@ export type {
   ChannelsPatch,
 } from './services/channels/channels.shared';
 
-import { channelsClient } from './services/channels/channels.shared';
-export type {
-  Channels,
-  ChannelsData,
-  ChannelsQuery,
-  ChannelsPatch,
-} from './services/channels/channels.shared';
-
 import { userClient } from './services/users/users.shared';
 export type { User, UserData, UserQuery, UserPatch } from './services/users/users.shared';
 

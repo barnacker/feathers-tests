@@ -30,8 +30,15 @@ app.configure(
   socketio({
     cors: {
       origin: app.get('origins'),
+        },
+  },(io) => {
+      io.sockets.setMaxListeners(255);
+      io.use((socket, next) => {
+        (socket as any).feathers.channels = socket.handshake.query.channels || [];
+        next();
+      });
     },
-  }),
+),
 );
 app.configure(mongodb);
 app.configure(authentication);

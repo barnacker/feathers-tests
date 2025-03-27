@@ -6,6 +6,7 @@ import { useQuasar } from "quasar";
 import { type Ref, ref } from "vue";
 
 import { useFeathersService } from "@/feathers-client";
+import { feathersClient } from "@/feathers-client";
 import { useAuthStore } from "@f/Auth/store";
 
 import UserAvatar from "@f/Auth/components/UserAvatar.vue";
@@ -15,6 +16,7 @@ const props = defineProps<{ user: ServiceInstance<UserType> }>();
 const $q = useQuasar();
 const auth = useAuthStore();
 const User = useFeathersService("users");
+const Channel = useFeathersService("channels")
 
 const showDeletePrompt = ref<boolean>(false);
 const showEditForm = ref<boolean>(false);
@@ -41,14 +43,16 @@ const deleteUser = async () => {
     });
   }
 };
+const tabids = ref([])
+
 const updateUser = (userClone: Ref<ServiceInstance<UserType>>) => {
   try {
-    userClone.value.save();
+    userClone.save();
     $q.notify({
       color: "green-4",
       textColor: "white",
       icon: "check",
-      message: `User ${userClone.value.firstName} was updated.`,
+      message: `User ${userClone.firstName} was updated.`,
     });
     showEditForm.value = false;
   } catch (error) {
@@ -61,6 +65,7 @@ const updateUser = (userClone: Ref<ServiceInstance<UserType>>) => {
     });
   }
 };
+console.log(feathersClient)
 </script>
 
 <template>
@@ -80,7 +85,7 @@ const updateUser = (userClone: Ref<ServiceInstance<UserType>>) => {
           icon="edit"
           color="green"
           flat
-          @click="showEditForm = true"
+          @click="showEditForm = true;Channel.create({id:user._id}) "
         />
         <q-btn
           icon="delete"

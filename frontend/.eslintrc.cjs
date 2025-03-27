@@ -4,7 +4,8 @@ module.exports = {
     "es6": true,
     "node": true,
   },
-  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "extends": ["eslint:recommended"  ],
+
   "parser": "vue-eslint-parser",
   "parserOptions": {
     "parser": "@typescript-eslint/parser",
@@ -12,7 +13,7 @@ module.exports = {
   },
   "plugins": ["simple-import-sort"],
   "rules": {
-    // allow debugger during development only
+      // allow debugger during development only
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
     // Sorting imports
     "simple-import-sort/imports": [
