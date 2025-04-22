@@ -3,7 +3,7 @@ import { feathers } from '@feathersjs/feathers';
 import configuration from '@feathersjs/configuration';
 import { koa, rest, bodyParser, errorHandler, parseAuthentication, cors, serveStatic } from '@feathersjs/koa';
 import socketio from '@feathersjs/socketio';
-
+import { HookContext, NextFunction } from './declarations'
 import { configurationValidator } from './configuration';
 import type { Application } from './declarations';
 import { logError } from './hooks/log-error';
@@ -40,6 +40,13 @@ app.configure(
     },
 ),
 );
+
+
+const activeUsers =(context:HookContext)=> {
+  context.data.activeUsers = 'shnoles'
+return context
+}
+
 app.configure(mongodb);
 app.configure(authentication);
 app.configure(services);
@@ -50,7 +57,9 @@ app.hooks({
   around: {
     all: [logError],
   },
-  before: {},
+  before: {
+   patch:[activeUsers],
+  },
   after: {},
   error: {},
 });

@@ -11,8 +11,6 @@ export const channels = (app: Application) => {
   );
 
   app.on('connection', (connection: RealTimeConnection) => {
-    console.log('connection');
-    logger.warn('connection')
     // On a new real-time connection, add it to the anonymous channel
     app.channel('anonymous').join(connection);
   });
@@ -32,19 +30,23 @@ export const channels = (app: Application) => {
   });
 
   // eslint-disable-next-line no-unused-vars
-  app.publish((data: any, context: HookContext) => {
+  app.publish((data, context: HookContext) => {
     // Here you can add event publishers to channels set up in `channels.js`
-    // To publish only for a specific event use `app.publish(eventname, () => {})`
+    // To publish only for a specific event use `app.pub  lish(eventname, () => {})`
     // e.g. to publish all service events to all authenticated users use
-    console.log( context.self instanceof ChannelsService)
-    if(context.arguments[2]?.connection?.user){
-
-
-    console.log(data._id)
-    return [
-        app.channel(`users/${context.arguments[2].connection.user._id}`),
-      //  app.channel(`channels/${context.arguments[2].connection.user._id}`),
+    console.log(context.self instanceof ChannelsService)
+    if (context.self instanceof ChannelsService) {
+      console.log('is a channel service')
+      return
+    }
+    if (context.arguments[2]?.connection?.user) {
+      console.log(context.arguments[0])
+      return [
+        app.channel(context.arguments[0]),
+        // app.channel(`users/${context.arguments[2].connection.user._id}`),
+        //  app.channel(`channels/${context.arguments[2].connection.user._id}`),
       ]
     }
+    return app.channel('anonymous')
   });
 };

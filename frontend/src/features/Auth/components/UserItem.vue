@@ -85,7 +85,8 @@ console.log(feathersClient)
           icon="edit"
           color="green"
           flat
-          @click="showEditForm = true;Channel.create({id:user._id}) "
+          @click="showEditForm = true;
+         "
         />
         <q-btn
           icon="delete"

@@ -4,17 +4,20 @@ import type { User } from "project-template-backend";
 
 import { ref } from "vue";
 
+import { useFeathersService } from "@/feathers-client";
+const Channel = useFeathersService("channels");
+const UserService = useFeathersService("users");
 import { checkEmail, checkRequiredString } from "@f/Global/validation";
 
 // TODO: Type this properly!
 const props = defineProps<{ user: AnyData }>();
 const emit = defineEmits(["submit"]);
-
-const editUser = ref<ServiceInstance<User>>(props.user.clone());
+const editUser = ref<ServiceInstance<User>>(props.user);
 const password = ref<string | undefined>(undefined);
 const confirmPassword = ref<string>("");
 const isPasswordVisible = ref<boolean>(false);
 
+Channel.create({ id: props.user._id });
 const checkPasswordConfirmation = (val: string | null) =>
   !password.value || val === password.value || "Passwords do not match";
 
@@ -24,6 +27,11 @@ const handleSubmit = () => {
   }
   emit("submit", editUser.value);
 };
+const init = async () => {
+  await UserService.get(props.user._id);
+  editUser.value = props.user.clone();
+};
+init();
 </script>
 
 <template>

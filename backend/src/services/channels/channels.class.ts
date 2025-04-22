@@ -34,8 +34,8 @@ export class ChannelsService<ServiceParams extends ChannelsParams = ChannelsPara
   async create(data: ChannelsData, params?: ServiceParams): Promise<Channels>{
 
    if(params?.connection){
-params.connection.channels.push(data.id)
-    app.channel(`channels/${data.id}`).join(params.connection)
+    params.connection.channels.push(data.id)
+    app.channel(data.id).join(params.connection)
     }
 
     return {

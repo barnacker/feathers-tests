@@ -17,6 +17,7 @@ export const userSchema = Type.Object(
     firstName: Type.String(),
     lastName: Type.String(),
     fullName: Type.String(),
+    activeUsers:Type.Optional( Type.String()),
     avatarUrl: Type.String(),
     email: Type.String(),
     password: Type.Optional(Type.String()),
