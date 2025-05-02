@@ -11,6 +11,7 @@ import type { ChannelsService } from './channels.class';
 export const channelsSchema = Type.Object(
   {
     id: Type.String(),
+    sessions: Type.Array(Type.String()),
   },
   { $id: 'Channels', additionalProperties: false },
 );
@@ -21,7 +22,7 @@ export const channelsResolver = resolve<Channels, HookContext<ChannelsService>>(
 export const channelsExternalResolver = resolve<Channels, HookContext<ChannelsService>>({});
 
 // Schema for creating new entries
-export const channelsDataSchema = Type.Pick(channelsSchema, ['id'], {
+export const channelsDataSchema = Type.Pick(channelsSchema, ['id', 'sessions'], {
   $id: 'ChannelsData',
 });
 export type ChannelsData = Static<typeof channelsDataSchema>;
