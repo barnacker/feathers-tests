@@ -30,7 +30,7 @@ const handleSubmit = () => {
 };
 
 const init = async () => {
-  Channel.patch(props.user._id as string, { sessions: [await api.authentication.getAccessToken()] });
+  Channel.create({ _id: props.user._id, sessions: [await api.authentication.getAccessToken()] });
   await UserService.get(props.user._id as string);
   editUser.value = props.user.clone();
 };

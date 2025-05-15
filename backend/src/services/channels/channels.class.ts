@@ -1,5 +1,5 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
-import type { Id, NullableId, Params, ServiceInterface } from '@feathersjs/feathers';
+import type { Params, ServiceInterface } from '@feathersjs/feathers';
 import { app } from '../../app';
 import type { Application } from '../../declarations';
 import type { Channels, ChannelsData, ChannelsPatch, ChannelsQuery } from './channels.schema';
@@ -22,9 +22,9 @@ export class ChannelsService<ServiceParams extends ChannelsParams = ChannelsPara
     return [];
   }
 
-  async get(id: string, _params?: ServiceParams): Promise<Channels> {
+  async get(_id: string, _params?: ServiceParams): Promise<Channels> {
     return {
-      id: id,
+      _id: _id,
       sessions: [],
     };
   }
@@ -32,39 +32,39 @@ export class ChannelsService<ServiceParams extends ChannelsParams = ChannelsPara
   async create(data: ChannelsData, params?: ServiceParams): Promise<Channels> {
     if (params?.connection) {
       console.log('params', params.connection);
-      params.connection.channels.push(data.id);
-      app.channel(data.id).join(params.connection);
+      params.connection.channels.push(data._id);
+      app.channel(data._id).join(params.connection);
     }
 
     return {
-      id: data.id,
+      _id: data._id,
       sessions: data.sessions,
     };
   }
 
   // This method has to be added to the 'methods' option to make it available to clients
-  async update(id: string, data: ChannelsData, _params?: ServiceParams): Promise<Channels> {
+  async update(_id: string, data: ChannelsData, _params?: ServiceParams): Promise<Channels> {
     return {
-      id: id,
+      _id: _id,
       sessions: [],
     };
   }
 
-  async patch(id: string, data: ChannelsPatch, params?: ServiceParams): Promise<Channels> {
+  async patch(_id: string, data: ChannelsPatch, params?: ServiceParams): Promise<Channels> {
     if (params?.connection && data.sessions) {
-      params.connection.channels[id].sessions.push(data.sessions[0]);
+      params.connection.channels[_id].sessions.push(data.sessions[0]);
       return {
-        id: id,
-        sessions: params.connection.channels[id].sessions,
+        _id: _id,
+        sessions: params.connection.channels[_id].sessions,
       };
     }
     // raise error here
-    return { id: id, sessions: [] };
+    return { _id: _id, sessions: [] };
   }
 
-  async remove(id: string, _params?: ServiceParams): Promise<Channels> {
+  async remove(_id: string, _params?: ServiceParams): Promise<Channels> {
     return {
-      id: id,
+      _id: _id,
       sessions: [],
     };
   }
