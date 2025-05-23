@@ -36,15 +36,11 @@ export const channels = (app: Application) => {
     // e.g. to publish all service events to all authenticated users use
     if (context.self instanceof ChannelsService) {
       console.log('is a channel service');
+      console.log(context.arguments[2]?.connection?.channels);
       return;
     }
     if (context.arguments[2]?.connection?.user) {
-      console.log(context.arguments[0]);
-      return [
-        app.channel(context.arguments[0]),
-        // app.channel(`users/${context.arguments[2].connection.user._id}`),
-        //  app.channel(`channels/${context.arguments[2].connection.user._id}`),
-      ];
+      return [app.channel(context.arguments[0])];
     }
     return app.channel('anonymous');
   });

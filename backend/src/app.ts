@@ -27,20 +27,11 @@ app.use(bodyParser());
 // Configure services and transports
 app.configure(rest());
 app.configure(
-  socketio(
-    {
-      cors: {
-        origin: app.get('origins'),
-      },
+  socketio({
+    cors: {
+      origin: app.get('origins'),
     },
-    (io) => {
-      io.sockets.setMaxListeners(255);
-      io.use((socket, next) => {
-        (socket as any).feathers.channels = socket.handshake.query.channels || [];
-        next();
-      });
-    },
-  ),
+  }),
 );
 
 app.configure(mongodb);

@@ -7,7 +7,7 @@ import io from "socket.io-client";
 import { pinia } from "./modules/pinia";
 
 const host = (import.meta.env.VITE_MY_API_URL as string) || "http://localhost:3030";
-const socket = io(host, { transports: ["websocket"],query:{ channels:[]}});
+const socket = io(host, { transports: ["websocket"] });
 
 export const feathersClient = feathers<Record<string, FeathersService>>()
   .configure(socketio(socket))

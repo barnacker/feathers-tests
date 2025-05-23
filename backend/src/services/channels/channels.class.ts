@@ -6,6 +6,8 @@ import type { Channels, ChannelsData, ChannelsPatch, ChannelsQuery } from './cha
 
 export type { Channels, ChannelsData, ChannelsPatch, ChannelsQuery };
 
+import { NotFound, GeneralError, NotImplemented } from '@feathersjs/errors';
+
 export interface ChannelsServiceOptions {
   app: Application;
 }
@@ -19,54 +21,32 @@ export class ChannelsService<ServiceParams extends ChannelsParams = ChannelsPara
   constructor(public options: ChannelsServiceOptions) {}
 
   async find(_params?: ServiceParams): Promise<Channels[]> {
-    return [];
+    throw new NotImplemented(`Channels can't be read.`);
   }
 
-  async get(_id: string, _params?: ServiceParams): Promise<Channels> {
-    return {
-      _id: _id,
-      sessions: [],
-    };
+  async get(_id: string, params?: ServiceParams): Promise<Channels> {
+    throw new NotImplemented(`Channels can't be read.`);
   }
 
   async create(data: ChannelsData, params?: ServiceParams): Promise<Channels> {
     if (params?.connection) {
       console.log('params', params.connection);
-      params.connection.channels.push(data._id);
       app.channel(data._id).join(params.connection);
+      return data;
     }
-
-    return {
-      _id: data._id,
-      sessions: data.sessions,
-    };
-  }
-
-  // This method has to be added to the 'methods' option to make it available to clients
-  async update(_id: string, data: ChannelsData, _params?: ServiceParams): Promise<Channels> {
-    return {
-      _id: _id,
-      sessions: [],
-    };
+    throw new GeneralError(`Failed to add Channel with id ${data._id}, not using WebSockets`);
   }
 
   async patch(_id: string, data: ChannelsPatch, params?: ServiceParams): Promise<Channels> {
-    if (params?.connection && data.sessions) {
-      params.connection.channels[_id].sessions.push(data.sessions[0]);
-      return {
-        _id: _id,
-        sessions: params.connection.channels[_id].sessions,
-      };
-    }
-    // raise error here
-    return { _id: _id, sessions: [] };
+    throw new NotImplemented(`Channels can't be patched.`);
   }
 
-  async remove(_id: string, _params?: ServiceParams): Promise<Channels> {
-    return {
-      _id: _id,
-      sessions: [],
-    };
+  async remove(_id: string, params?: ServiceParams): Promise<Channels> {
+    if (params?.connection) {
+      app.channel(_id).leave(params.connection);
+    }
+    // raise error here
+    throw new NotFound(`Channel with id ${_id} not found`);
   }
 }
 

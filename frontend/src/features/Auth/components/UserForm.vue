@@ -7,6 +7,7 @@ import { ref } from "vue";
 import { useFeathers, useFeathersService } from "@/feathers-client";
 
 const { api } = useFeathers();
+import { Id } from "@feathersjs/feathers";
 const Channel = useFeathersService("channels");
 const UserService = useFeathersService("users");
 import { checkEmail, checkRequiredString } from "@f/Global/validation";
@@ -30,7 +31,16 @@ const handleSubmit = () => {
 };
 
 const init = async () => {
-  Channel.create({ _id: props.user._id, sessions: [await api.authentication.getAccessToken()] });
+  console.log("Handling channel");
+  try {
+    await Channel.get(props.user._id as Id);
+    console.log("Patching channel");
+    Channel.patch(props.user._id as Id, { sessions: [await api.authentication.getAccessToken()] });
+  } catch (error) {
+    console.log("Creating channel");
+    Channel.create({ _id: props.user._id, sessions: [await api.authentication.getAccessToken()] });
+  }
+
   await UserService.get(props.user._id as string);
   editUser.value = props.user.clone();
 };

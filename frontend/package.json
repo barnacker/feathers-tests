@@ -20,7 +20,7 @@
     "@quasar/extras": "^1.16.9",
     "feathers-pinia": "4.1.1",
     "pinia": "^2.1.7",
-    "project-template-backend": "file:../backend/public/project-template-backend-0.1.1.tgz",
+    "project-template-backend": "file:../backend/public/project-template-backend-0.1.2.tgz",
     "quasar": "^2.14.2",
     "socket.io-client": "^4.7.4",
     "vue": "^3.4.15"
