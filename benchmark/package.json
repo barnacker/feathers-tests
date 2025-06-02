@@ -1,0 +1,19 @@
+{
+  "name": "benchmark",
+  "version": "1.0.0",
+  "main": "dist/fetchUsersWithWorkers.js",
+  "scripts": {
+    "start:client": "node dist/fetchUsersWithWorkers.js",
+    "create:users": "node dist/createUsers.js",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@feathersjs/feathers": "^5.0.8",
+    "@feathersjs/socketio-client": "^5.0.8",
+    "socket.io-client": "^4.7.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "@types/node": "^20.5.9"
+  }
+}
