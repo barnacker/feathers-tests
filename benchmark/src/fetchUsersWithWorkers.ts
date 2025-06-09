@@ -1,4 +1,4 @@
-import { Worker, isMainThread } from 'worker_threads';
+import { Worker, isMainThread, workerData } from 'worker_threads';
 import { join } from 'path';
 
 // Define the User type
@@ -15,18 +15,33 @@ if (isMainThread) {
     const workerCount = 200;
     const workers: Worker[] = [];
     const results: any[] = [];
+    let patched: string[] = [];
 
     // Path to the compiled worker script (JavaScript file)
     const workerPath = join(__dirname, '../dist/userWorker.js');
 
     // Create 200 workers
+    console.log(`Spinning up ${workerCount} workers...`);
+    console.time('Workers');
     for (let i = 0; i < workerCount; i++) {
       try {
         const worker = new Worker(workerPath, { workerData: { workerId: i } });
         workers.push(worker);
 
         worker.on('message', (result) => {
+          if (result.patched) {
+            if (patched.length === 0) {
+              console.time('User patched');
+            }
+            patched.push(result.workerId);
+            if (patched.length === workers.length) {
+              console.timeEnd('User patched');
+              patched = [];
+            }
+            return;
+          }
           results.push(result);
+
           console.log(
             `Worker ${result.workerId}: ${result.success ? `Fetched ${result.count} users` : `Error: ${result.error}`}`,
           );
@@ -45,7 +60,8 @@ if (isMainThread) {
         console.error(`Failed to create worker ${i}:`, error);
       }
     }
-
+    console.log(`Created ${workers.length} workers.`);
+    console.timeEnd('Workers');
     // Wait for all workers to complete
     await Promise.all(
       workers.map(

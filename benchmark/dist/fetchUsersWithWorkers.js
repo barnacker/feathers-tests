@@ -8,14 +8,28 @@ if (worker_threads_1.isMainThread) {
         const workerCount = 200;
         const workers = [];
         const results = [];
+        let patched = [];
         // Path to the compiled worker script (JavaScript file)
         const workerPath = (0, path_1.join)(__dirname, '../dist/userWorker.js');
         // Create 200 workers
+        console.log(`Spinning up ${workerCount} workers...`);
+        console.time('Workers');
         for (let i = 0; i < workerCount; i++) {
             try {
                 const worker = new worker_threads_1.Worker(workerPath, { workerData: { workerId: i } });
                 workers.push(worker);
                 worker.on('message', (result) => {
+                    if (result.patched) {
+                        if (patched.length === 0) {
+                            console.time('User patched');
+                        }
+                        patched.push(result.workerId);
+                        if (patched.length === workers.length) {
+                            console.timeEnd('User patched');
+                            patched = [];
+                        }
+                        return;
+                    }
                     results.push(result);
                     console.log(`Worker ${result.workerId}: ${result.success ? `Fetched ${result.count} users` : `Error: ${result.error}`}`);
                 });
@@ -32,6 +46,8 @@ if (worker_threads_1.isMainThread) {
                 console.error(`Failed to create worker ${i}:`, error);
             }
         }
+        console.log(`Created ${workers.length} workers.`);
+        console.timeEnd('Workers');
         // Wait for all workers to complete
         await Promise.all(workers.map((worker, index) => new Promise((resolve) => {
             worker.on('exit', () => resolve(index));

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dist/fetchUsersWithWorkers.js",
   "scripts": {
-    "start:client": "node dist/fetchUsersWithWorkers.js",
+    "benchmark": "node dist/fetchUsersWithWorkers.js",
     "create:users": "node dist/createUsers.js",
     "build": "tsc"
   },
