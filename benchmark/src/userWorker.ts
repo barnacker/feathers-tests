@@ -34,7 +34,10 @@ app.configure(socketio(socket));
 const userService = app.service('users');
 
 userService.on('patched', (user: User) => {
+  const test = workerData.workerId;
+  console.log(`Worker id:`, test);
   parentPort?.postMessage({ success: true, workerId: workerData.workerId, patched: user });
+  process.exit(0);
 });
 async function fetchUsers() {
   try {

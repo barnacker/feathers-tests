@@ -21,7 +21,7 @@ export const userSchema = Type.Object(
     email: Type.String(),
     password: Type.Optional(Type.String()),
   },
-  { $id: 'User', additionalProperties: false },
+  { $id: 'User', additionalProperties: true },
 );
 export type User = Static<typeof userSchema>;
 export const userValidator = getValidator(userSchema, dataValidator);
@@ -66,9 +66,9 @@ export const userQuerySchema = Type.Intersect(
   [
     querySyntax(userQueryProperties),
     // Add additional query properties here
-    Type.Object({}, { additionalProperties: false }),
+    Type.Object({}, { additionalProperties: true }),
   ],
-  { additionalProperties: false },
+  { additionalProperties: true },
 );
 export type UserQuery = Static<typeof userQuerySchema>;
 export const userQueryValidator = getValidator(userQuerySchema, queryValidator);

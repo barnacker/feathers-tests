@@ -27,7 +27,10 @@ const socket = (0, socket_io_client_1.io)('http://localhost:3030'); // Replace w
 app.configure((0, socketio_client_1.default)(socket));
 const userService = app.service('users');
 userService.on('patched', (user) => {
+    const test = worker_threads_1.workerData.workerId;
+    console.log(`Worker id:`, test);
     worker_threads_1.parentPort === null || worker_threads_1.parentPort === void 0 ? void 0 : worker_threads_1.parentPort.postMessage({ success: true, workerId: worker_threads_1.workerData.workerId, patched: user });
+    process.exit(0);
 });
 async function fetchUsers() {
     var _a;

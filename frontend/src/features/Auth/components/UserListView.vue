@@ -20,7 +20,7 @@ const showCreateForm = ref<boolean>(false);
 const newUser = ref(User.new());
 
 const addUser = (userClone: ServiceInstance<UserType>) => {
-  userClone.save();
+  userClone.create();
   showCreateForm.value = false;
   newUser.value = User.new();
 };

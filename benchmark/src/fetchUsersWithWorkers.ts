@@ -31,10 +31,12 @@ if (isMainThread) {
         worker.on('message', (result) => {
           if (result.patched) {
             if (patched.length === 0) {
+              console.log('Patching users...');
               console.time('User patched');
             }
             patched.push(result.workerId);
             if (patched.length === workers.length) {
+              console.log(`Patched ${patched.length} users.`);
               console.timeEnd('User patched');
               patched = [];
             }
