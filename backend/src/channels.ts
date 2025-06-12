@@ -34,6 +34,9 @@ export const channels = (app: Application) => {
     // Here you can add event publishers to channels set up in `channels.js`
     // To publish only for a specific event use `app.pub  lish(eventname, () => {})`
     // e.g. to publish all service events to all authenticated users use
+    const conex = app.channel('anonymous').connections;
+    console.log('lenght of channels', app.channel('anonymous').length);
+    // console.log('connections in anonymous channel', conex);
     if (context.self instanceof ChannelsService) {
       console.log('is a channel service');
       console.log(context.arguments[2]?.connection?.channels);

@@ -44,7 +44,7 @@ const init = async () => {
   await UserService.get(props.user._id as string);
   editUser.value = props.user.clone();
 };
-init();
+//init();
 </script>
 
 <template>

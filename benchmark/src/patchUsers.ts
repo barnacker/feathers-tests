@@ -33,21 +33,29 @@ app.configure(socketio(socket));
 
 const userService = app.service('users');
 
-userService.on('patched', (user: User) => {
-  parentPort?.postMessage({ success: true, workerId: workerData.workerId, patched: user });
-});
-async function fetchUsers() {
+async function patchUsers(count: number = 120) {
   try {
+    console.time('Patched');
+    console.log(`Starting patch of ${count} users...`);
+
     const users = await userService.find();
-    return { success: true, workerId: workerData.workerId, count: users.length || users.data?.length };
+    console.log(`Fetched ${users.data.length} users from the service.`);
+    for (let i = 0; i < count; i++) {
+      const user = users.data[i];
+      user.firstName = `${user.firstName}${i}`;
+      await userService.patch(user._id, user);
+
+      // Log progress every 10 users
+      if ((i + 1) % 10 === 0) {
+        console.log(`Patched ${i + 1}/${count} users`);
+      }
+    }
+    console.timeEnd('Patched');
+    console.log(`Successfully patched ${count} users.`);
   } catch (error) {
-    // Type guard to check if error is an Error instance
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    return { success: false, workerId: workerData.workerId, error: errorMessage };
+    console.error('Error patching users:', error);
   }
 }
 
-// Execute and send result back to main thread
-// fetchUsers().then((result) => {
-//   parentPort?.postMessage(result);
-// });
+// Run the function
+patchUsers(1000);
