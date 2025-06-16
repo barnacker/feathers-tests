@@ -36,6 +36,10 @@ const userService = app.service('users');
 userService.on('patched', (user: User) => {
   parentPort?.postMessage({ success: true, workerId: workerData.workerId, patched: user });
 });
+
+socket.on('superPatch', (result) => {
+  console.log(`Worker ${workerData.workerId} received message:`, result);
+});
 async function fetchUsers() {
   try {
     const users = await userService.find();

@@ -6,6 +6,7 @@
     "benchmark": "node dist/fetchUsersWithWorkers.js",
     "create:users": "node dist/createUsers.js",
     "patch:users": "node dist/patchUsers.js",
+    "superPatch:users": "node dist/superPatchUser.js",
     "build": "tsc"
   },
   "dependencies": {

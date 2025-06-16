@@ -4,6 +4,14 @@ import type { TransportConnection, Application } from '@feathersjs/feathers';
 import authenticationClient from '@feathersjs/authentication-client';
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client';
 
+import { superPatchClient } from './services/super-patch/super-patch.shared';
+export type {
+  SuperPatch,
+  SuperPatchData,
+  SuperPatchQuery,
+  SuperPatchPatch,
+} from './services/super-patch/super-patch.shared';
+
 import { channelsClient } from './services/channels/channels.shared';
 export type {
   Channels,
@@ -44,5 +52,6 @@ export const createClient = <Configuration = any,>(
   client.configure(userClient);
   client.configure(channelsClient);
   client.configure(channelsClient);
+  client.configure(superPatchClient);
   return client;
 };

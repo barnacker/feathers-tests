@@ -29,6 +29,9 @@ const userService = app.service('users');
 userService.on('patched', (user) => {
     worker_threads_1.parentPort === null || worker_threads_1.parentPort === void 0 ? void 0 : worker_threads_1.parentPort.postMessage({ success: true, workerId: worker_threads_1.workerData.workerId, patched: user });
 });
+socket.on('superPatch', (result) => {
+    console.log(`Worker ${worker_threads_1.workerData.workerId} received message:`, result);
+});
 async function fetchUsers() {
     var _a;
     try {

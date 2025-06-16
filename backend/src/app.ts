@@ -55,5 +55,9 @@ app.hooks({
   setup: [],
   teardown: [],
 });
-
+console.log('Application initialized');
+app.on('superPatch', (result) => {
+  console.log('poel');
+  app.emit('superPatch', result);
+});
 export { app };
