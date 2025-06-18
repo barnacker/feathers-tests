@@ -32,14 +32,16 @@ const socket = io('http://localhost:3030'); // Replace with your Feathers server
 app.configure(socketio(socket));
 
 const userService = app.service('users');
+const benchService = app.service('bench');
 
 userService.on('patched', (user: User) => {
   parentPort?.postMessage({ success: true, workerId: workerData.workerId, patched: user });
 });
 
-socket.on('superPatch', (result) => {
-  console.log(`Worker ${workerData.workerId} received message:`, result);
+benchService.on('superPatch', (data) => {
+  console.log(`Worker ${workerData.workerId} received message:`, data);
 });
+
 async function fetchUsers() {
   try {
     const users = await userService.find();

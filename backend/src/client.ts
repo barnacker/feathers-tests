@@ -4,6 +4,9 @@ import type { TransportConnection, Application } from '@feathersjs/feathers';
 import authenticationClient from '@feathersjs/authentication-client';
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client';
 
+import { benchClient } from './services/bench/bench.shared';
+export type { Bench, BenchData, BenchQuery, BenchPatch } from './services/bench/bench.shared';
+
 import { superPatchClient } from './services/super-patch/super-patch.shared';
 export type {
   SuperPatch,
@@ -53,5 +56,6 @@ export const createClient = <Configuration = any,>(
   client.configure(channelsClient);
   client.configure(channelsClient);
   client.configure(superPatchClient);
+  client.configure(benchClient);
   return client;
 };
