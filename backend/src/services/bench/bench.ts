@@ -13,7 +13,7 @@ export const bench = (app: Application) => {
     // A list of all methods this service exposes externally
     methods: benchMethods,
     // You can add additional custom events to be sent to clients here
-    events: ['superPatch'],
+    events: [],
   });
   // Initialize hooks
   app.service(benchPath).hooks({

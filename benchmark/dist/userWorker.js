@@ -25,18 +25,23 @@ console.log = function (...args) {
 const app = (0, feathers_1.feathers)();
 const socket = (0, socket_io_client_1.io)('http://localhost:3030'); // Replace with your Feathers server URL
 app.configure((0, socketio_client_1.default)(socket));
+let users;
 const userService = app.service('users');
+const benchService = app.service('bench');
 userService.on('patched', (user) => {
     worker_threads_1.parentPort === null || worker_threads_1.parentPort === void 0 ? void 0 : worker_threads_1.parentPort.postMessage({ success: true, workerId: worker_threads_1.workerData.workerId, patched: user });
 });
-socket.on('superPatch', (result) => {
-    console.log(`Worker ${worker_threads_1.workerData.workerId} received message:`, result);
+benchService.on('created', async (data) => {
+    var _a, _b, _c;
+    await userService.patch(users.data[0]._id, {
+        firstName: `${(_a = users === null || users === void 0 ? void 0 : users.data[0]) === null || _a === void 0 ? void 0 : _a.firstName} ${worker_threads_1.workerData.workerId}`,
+    });
+    console.log(`Worker ${worker_threads_1.workerData.workerId} patched: ${(_b = users === null || users === void 0 ? void 0 : users.data[0]) === null || _b === void 0 ? void 0 : _b.firstName} ${(_c = users === null || users === void 0 ? void 0 : users.data[0]) === null || _c === void 0 ? void 0 : _c.lastName}`);
 });
 async function fetchUsers() {
-    var _a;
     try {
-        const users = await userService.find();
-        return { success: true, workerId: worker_threads_1.workerData.workerId, count: users.length || ((_a = users.data) === null || _a === void 0 ? void 0 : _a.length) };
+        users = await userService.find({ query: { $limit: 1, $skip: worker_threads_1.workerData.workerId } });
+        return { success: true, workerId: worker_threads_1.workerData.workerId, user: users.data[0] };
     }
     catch (error) {
         // Type guard to check if error is an Error instance
@@ -45,6 +50,6 @@ async function fetchUsers() {
     }
 }
 // Execute and send result back to main thread
-// fetchUsers().then((result) => {
-//   parentPort?.postMessage(result);
-// });
+fetchUsers().then((result) => {
+    worker_threads_1.parentPort === null || worker_threads_1.parentPort === void 0 ? void 0 : worker_threads_1.parentPort.postMessage(result);
+});

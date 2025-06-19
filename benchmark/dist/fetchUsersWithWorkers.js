@@ -33,7 +33,7 @@ if (worker_threads_1.isMainThread) {
                         return;
                     }
                     results.push(result);
-                    console.log(`Worker ${result.workerId}: ${result.success ? `Fetched ${result.count} users` : `Error: ${result.error}`}`);
+                    console.log(`Worker ${result.workerId}: ${result.success ? `Fetched ${result.user.firstName} ${result.user.lastName}` : `Error: ${result.error}`}`);
                 });
                 worker.on('error', (error) => {
                     console.error(`Worker ${i} error:`, error);

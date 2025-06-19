@@ -31,6 +31,8 @@ const app = feathers();
 const socket = io('http://localhost:3030'); // Replace with your Feathers server URL
 app.configure(socketio(socket));
 
+let users: any;
+
 const userService = app.service('users');
 const benchService = app.service('bench');
 
@@ -38,14 +40,19 @@ userService.on('patched', (user: User) => {
   parentPort?.postMessage({ success: true, workerId: workerData.workerId, patched: user });
 });
 
-benchService.on('superPatch', (data) => {
-  console.log(`Worker ${workerData.workerId} received message:`, data);
+benchService.on('created', async (data) => {
+  await userService.patch(users.data[0]._id, {
+    firstName: `${users?.data[0]?.firstName} ${workerData.workerId}`,
+  });
+  console.log(
+    `Worker ${workerData.workerId} patched: ${users?.data[0]?.firstName} ${users?.data[0]?.lastName}`,
+  );
 });
 
 async function fetchUsers() {
   try {
-    const users = await userService.find();
-    return { success: true, workerId: workerData.workerId, count: users.length || users.data?.length };
+    users = await userService.find({ query: { $limit: 1, $skip: workerData.workerId } });
+    return { success: true, workerId: workerData.workerId, user: users.data[0] };
   } catch (error) {
     // Type guard to check if error is an Error instance
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -54,6 +61,6 @@ async function fetchUsers() {
 }
 
 // Execute and send result back to main thread
-// fetchUsers().then((result) => {
-//   parentPort?.postMessage(result);
-// });
+fetchUsers().then((result) => {
+  parentPort?.postMessage(result);
+});
