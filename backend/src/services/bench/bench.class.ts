@@ -2,6 +2,7 @@
 import type { Id, NullableId, Params, ServiceInterface } from '@feathersjs/feathers';
 
 import type { Application } from '../../declarations';
+import { EventEmitter } from 'events'
 
 type Bench = any;
 type BenchData = any;
@@ -17,10 +18,10 @@ export interface BenchServiceOptions {
 export interface BenchParams extends Params<BenchQuery> {}
 
 // This is a skeleton for a custom service class. Remove or add the methods you need here
-export class BenchService<ServiceParams extends BenchParams = BenchParams>
+export class BenchService<ServiceParams extends BenchParams = BenchParams > extends EventEmitter
   implements ServiceInterface<Bench, BenchData, ServiceParams, BenchPatch>
 {
-  constructor(public options: BenchServiceOptions) {}
+  constructor(public options: BenchServiceOptions) { super();}
 
   async find(_params?: ServiceParams): Promise<Bench[]> {
     return [];
